@@ -1,7 +1,5 @@
 #include <iostream>
-#include "stratoceph.h"
-
-
+#include "stratoceph/stratoceph.h"
 
 void stratoceph(){
     

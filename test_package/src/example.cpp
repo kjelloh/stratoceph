@@ -1,4 +1,4 @@
-#include "stratoceph.h"
+#include "stratoceph/stratoceph.h"
 #include <vector>
 #include <string>
 
