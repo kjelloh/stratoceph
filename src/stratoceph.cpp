@@ -1,5 +1,6 @@
 #include <iostream>
 #include "stratoceph/stratoceph.h"
+#include <pugixml.hpp>
 
 void stratoceph(){
     

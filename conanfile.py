@@ -19,6 +19,16 @@ class stratocephRecipe(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
 
+    def requirements(self):
+        self.requires("glfw/3.4", transitive_headers = True)
+        # self.requires("litehtml/0.8")
+        # self.requires("imgui/1.91.8")
+        self.requires("ncurses/6.5")
+        # self.requires("gtest/1.15.0")
+        self.requires("immer/0.8.1",transitive_headers = True)
+        self.requires("pugixml/1.14", transitive_headers = True)
+        self.requires("spdlog/1.15.1",transitive_headers = True)
+
     # Sources are located in the same place as this recipe, copy them to the recipe
     exports_sources = "CMakeLists.txt", "src/*", "include/*"
 
@@ -50,4 +60,3 @@ class stratocephRecipe(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["stratoceph"]
-
