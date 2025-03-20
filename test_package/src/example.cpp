@@ -3,8 +3,8 @@
 #include <string>
 
 // Hack - make both 'The Elm Architecture' available for test and refactor
-#include "stratoceph/ncurses/runtime.hpp" // HTML -> ncurses GUI
-#include "stratoceph/imgui/teapp.hpp" // HTML -> imgui / open_gl GU
+#include "stratoceph/ncurses/html_msg.hpp" // HTML -> ncurses GUI
+#include "stratoceph/imgui/html_msg.hpp" // HTML -> imgui / open_gl GU
 
 #include <iostream>
 #include <map>
