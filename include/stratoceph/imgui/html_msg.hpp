@@ -12,29 +12,6 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <GLFW/glfw3.h>
 
-// hide from other translation units
-namespace html_2_imgui_glfw {
-  // Renders doc as HTML to ncurses screen
-  // Note: HTML doc semantics may be tested at:
-  // https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro
-  void render(const pugi::xml_document &doc) {
-
-    // Parse the HTML-like structure
-    pugi::xml_node html = doc.child("html");
-    pugi::xml_node body = html.child("body");
-
-    int current_y = 1; // Start from row 1 to leave space for the top border
-    int num_divs = 0;
-
-    // Loop through divs directly and render them in sections
-    for (auto const &div : body.children("div")) {
-      // Render the content of the div inside the windows
-      const std::string text = div.text().as_string();
-      num_divs++;
-    }
-  }
-} // namespace
-
 namespace glfw {
   struct GLFW_RAII {
     bool m_init_ok{};
@@ -78,6 +55,30 @@ namespace glfw {
   }
 }
 
+namespace html_msg_imgui_glfw {
+
+
+  // Renders doc as HTML to ncurses screen
+  // Note: HTML doc semantics may be tested at:
+  // https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro
+  void render(const pugi::xml_document &doc) {
+
+    // Parse the HTML-like structure
+    pugi::xml_node html = doc.child("html");
+    pugi::xml_node body = html.child("body");
+
+    int current_y = 1; // Start from row 1 to leave space for the top border
+    int num_divs = 0;
+
+    // Loop through divs directly and render them in sections
+    for (auto const &div : body.children("div")) {
+      // Render the content of the div inside the windows
+      const std::string text = div.text().as_string();
+      num_divs++;
+    }
+  }
+} // namespace
+
 namespace tea {
     template <typename Msg>
     using IsQuit = std::function<bool(Msg)>;
@@ -91,7 +92,8 @@ namespace tea {
         std::map<std::string,std::function<std::optional<Msg>(Event)>> event_handlers{};
     };
 
-    template <typename Model, typename Msg> class App {
+    template <typename Model, typename Msg> 
+    class App {
     public:
       using Cmd = std::function<std::optional<Msg>()>;
       using Html = Html_Msg<Msg>;
@@ -141,7 +143,7 @@ namespace tea {
           glClear(GL_COLOR_BUFFER_BIT);
           // render the ux
           auto ui = m_view(model);
-          html_2_imgui_glfw::render(ui.doc);
+          html_msg_imgui_glfw::render(ui.doc);
 
           /* Swap front and back buffers */
           glfwSwapBuffers(window);
