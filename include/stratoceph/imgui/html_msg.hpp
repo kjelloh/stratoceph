@@ -103,10 +103,6 @@ namespace tea {
       App(init_fn init, view_fn view, update_fn update)
           : m_init(init), m_view(view), m_update(update) {};
       int run(int argc, char *argv[]) {
-        // See https://github.com/gabime/spdlog
-        auto logger = spdlog::rotating_logger_mt(
-            "rotating_logger", "logs/rotating_log.txt", 5 * 1024 * 1024, 3);
-        spdlog::set_default_logger(logger);
         spdlog::info("tea::App::run - BEGIN");
 
         glfw::GLFW_RAII glfw_raii{};

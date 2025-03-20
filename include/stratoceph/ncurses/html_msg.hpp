@@ -148,9 +148,6 @@ public:
     setenv("TERMINFO", "/usr/share/terminfo", 1);
 #endif
 
-    // See https://github.com/gabime/spdlog
-    auto logger = spdlog::rotating_logger_mt("rotating_logger", "logs/rotating_log.txt", 5 * 1024 * 1024, 3);
-    spdlog::set_default_logger(logger);
     spdlog::info("Runtime::run - BEGIN");
 
     html_msg_ncurses::Renderer renderer{};
@@ -164,6 +161,7 @@ public:
     cmd_q.push(cmd);
     // Main loop
     int loop_count{};
+    int result{1}; // Hack.
     while (true) {
 
       spdlog::info("Runtime::run loop_count: {}, cmd_q size: {}, msg_q size: {}", loop_count,cmd_q.size(), msg_q.size());
@@ -184,6 +182,7 @@ public:
 
         // Try client provided predicate to identify QUIT msg
         if (is_quit_msg(msg)) {
+          // result = 0; // Hack
           break;
         }
 
@@ -208,7 +207,8 @@ public:
     }
     spdlog::info("Runtime::run - END");
 
-    return (ch == '-') ? 1 : 0;
+    // Hack.
+    return result;
   }
 
 private:

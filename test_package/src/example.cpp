@@ -507,15 +507,63 @@ namespace first {
     // ----------------------------------
     // End: init,update,view
     // ----------------------------------
-  
-    int main(int argc, char *argv[]) {
-      Runtime<Model,Msg,Cmd> app(init,view,update);
-      return app.run(argc,argv);
-    }
-  } // namespace first
-  
+} // namespace first
+
+namespace first {
 
 int main(int argc, char *argv[]) {
+    Runtime<Model, Msg, Cmd> app(init, view, update);
+    return app.run(argc, argv);
+  }
+} // namespace first
+
+
+namespace zeroth {
+
+  using Model = int;
+  using Msg = int;
+  using Cmd = tea::App<Model,Msg>::Cmd;
+  using Html = tea::App<Model,Msg>::Html;
+
+  std::optional<Msg> NoOp() {
+      return {};
+  }
+
+  bool is_quit(Msg const& msg) {
+      return false;
+  }
+
+  std::tuple<Model,tea::IsQuit<Msg>,Cmd> init() {
+      return {{},is_quit,NoOp};
+  }
+
+  std::optional<Msg> on_key(tea::Event const& event) {
+      return {};
+  }
+
+  Html view(Model const& model) {
+      Html result{};
+      result.event_handlers["OnKey"] = on_key;
+      return result;
+  }
+
+  std::pair<Model, Cmd> update(Model const &model, Msg const &msg) {
+    return {Model{model}, NoOp};
+  }
+
+  int main(int argc, char *argv[]) {
+    tea::App<Model, Msg> app(init, view, update);
+    // std::cout << "\nFirst to call run :)" << std::flush;
+    return app.run(argc, argv);
+  }
+  
+} // namespace zeroth
+
+int main(int argc, char *argv[]) {
+
+    // See https://github.com/gabime/spdlog
+    auto logger = spdlog::rotating_logger_mt("rotating_logger", "logs/rotating_log.txt", 5 * 1024 * 1024, 3);
+    spdlog::set_default_logger(logger);
 
     if (true) {
         // conan template generated code
@@ -526,5 +574,11 @@ int main(int argc, char *argv[]) {
     }
 
     // Hack - code to refactor into client an stratoceph lib code
-    return first::main(argc,argv);
+    int result{};
+    while (true) {
+      if (result = first::main(argc,argv);result == 0) break;
+      if (result = zeroth::main(argc,argv);result == 0) break;
+    }
+    return result;
+
 }
